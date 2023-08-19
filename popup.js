@@ -15,7 +15,7 @@ function clipboardCopy(text) {
 }
 
 // // Inject a script into the tab.
-// await chrome.tabs.executeScript(tabId, {
+// await chrome.tabs.executeScript(activeTabId, {
 //     code: `
 //       const dom = document;
 //       const title = document.title;
@@ -42,14 +42,22 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-function insertContentScript(activeTabId) {
-  // activeTabId provided from PyScript, but could be from JS e.g.
-  // let tabId = chrome.tabs.query({ active: true })[0].id;
+var activeTabId;
 
-  // Inject content.js into the active tab to get the DOM.
-  chrome.scripting.executeScript({
-    target: { tabId: activeTabId },
-    files: [ "content.js" ],
-  });
+function getActiveTabId(callback) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        var activeTabId = tabs[0].id;
+        callback(activeTabId);
+    });
 }
 
+function insertContentScript() {
+  // activeTabId provided from PyScript, but could be from JS
+  getActiveTabId(function(activeTabId) {
+    // Inject content.js into the active tab to get the DOM.
+    chrome.scripting.executeScript({
+      target: { tabId: activeTabId },
+      files: [ "content.js" ],
+    });
+  }
+)};
