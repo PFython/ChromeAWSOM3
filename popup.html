@@ -23,17 +23,18 @@
 <!-- Deliberately breaking indendation for easy Copy/Paste of Python code -->
 <py-script>
 import json
-from js import getChrome, clipboardCopy, getDom
+from js import getChrome, clipboardCopy
+from js import insertContentScript  # Inserts and runs content.js (1st pass)
 
 chrome = getChrome()
 tabs = await chrome.tabs.query(["https://*/*"])
 active_tab = [x for x in tabs if x.active][0]
 
-print(f"<h3>DOM:</h3>")
-getDom(active_tab.id)
-
 print(f"<h3>ACTIVE TAB ({active_tab.id}):</h3>")
 print(active_tab.to_py())
+
+print(f"<h3>DOM:</h3>")
+insertContentScript(active_tab.id)  # Inserts and runs content.js (2nd pass)
 </py-script>
   </body>
 </head>

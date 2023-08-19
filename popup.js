@@ -14,19 +14,35 @@ function clipboardCopy(text) {
     alert("New content copied to clipboard")
 }
 
-// document.addEventListener('DOMContentLoaded', function () {
-//   document.getElementById('get-dom').addEventListener('click', onclick, false)
-//   function onclick () {
-//     chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
-//       chrome.tabs.sendMessage(tabs[0].id, 'getDOM', setDOM)
-//     })
-//   }
-//   function setDOM (dom) {
-//     alert(dom);
-//   }
-// }, false)
+// // Inject a script into the tab.
+// await chrome.tabs.executeScript(tabId, {
+//     code: `
+//       const dom = document;
+//       const title = document.title;
+//       const element = document.getElementById("my-element");
 
-function getDom(activeTabId) {
+//       chrome.runtime.sendMessage({
+//           info: {
+//               title,
+//               element,
+//             },
+//           });
+//         `,
+//       });
+
+// Listen for messages from the content script
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Check if the message is an object
+  var finalMessage = message
+  if (typeof message === "object") {
+    // Handle the received object here
+    alert(message);
+  } else {
+    alert(message);
+  }
+});
+
+function insertContentScript(activeTabId) {
   // activeTabId provided from PyScript, but could be from JS e.g.
   // let tabId = chrome.tabs.query({ active: true })[0].id;
 
@@ -36,3 +52,4 @@ function getDom(activeTabId) {
     files: [ "content.js" ],
   });
 }
+
