@@ -1,37 +1,6 @@
-chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-  chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      function: getDOMAsJSON
-  }, (result) => {
-      if (result && result.length > 0) {
-          displayDOMContent(result[0].result);
-      }
-  });
-});
-
-function getDOMAsJSON() {
-  function elementToJSON(node) {
-      let children = [];
-      for(let i = 0; i < node.childNodes.length; i++) {
-          let child = node.childNodes[i];
-          if(child.nodeType === 1) { // ELEMENT_NODE
-              children.push(elementToJSON(child));
-          }
-      }
-      return {
-          tagName: node.tagName,
-          attributes: Array.from(node.attributes).reduce((acc, attr) => {
-              acc[attr.name] = attr.value;
-              return acc;
-          }, {}),
-          children: children
-      };
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.action === 'updateH3') {
+    const h3s = document.querySelectorAll('h3');
+    h3s.forEach(h3 => h3.textContent = message.content);
   }
-
-  return elementToJSON(document.documentElement);
-}
-
-function displayDOMContent(json) {
-  let contentDiv = document.getElementById('dom-content');
-  contentDiv.textContent = JSON.stringify(json, null, 2);
-}
+});

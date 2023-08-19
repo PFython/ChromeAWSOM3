@@ -1,55 +1,23 @@
-function getChrome(){
-  return chrome;
-  }
+document.addEventListener('DOMContentLoaded', () => {
+  const helloDiv = document.getElementById('hello');
 
-function clipboardCopy(text) {
-    const input = document.createElement('input');
-    input.style.position = 'fixed';
-    input.style.opacity = 0;
-    input.value = text;
-    document.body.appendChild(input);
-    input.select();
-    document.execCommand('copy');
-    document.body.removeChild(input);
-    alert("New content copied to clipboard")
-}
+  const observer = new MutationObserver(() => {
+    // Fetch the currently active tab
+    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+      const activeTab = tabs[0];
 
-// // Inject a script into the tab.
-// await chrome.tabs.executeScript(tabId, {
-//     code: `
-//       const dom = document;
-//       const title = document.title;
-//       const element = document.getElementById("my-element");
+      chrome.scripting.executeScript({
+        target: {tabId: activeTab.id},
+        function: updateH3Content,
+        args: [helloDiv.textContent]
+      });
+    });
+  });
 
-//       chrome.runtime.sendMessage({
-//           info: {
-//               title,
-//               element,
-//             },
-//           });
-//         `,
-//       });
-
-// Listen for messages from the content script
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  // Check if the message is an object
-  var finalMessage = message
-  if (typeof message === "object") {
-    // Handle the received object here
-    alert(message);
-  } else {
-    alert(message);
+  observer.observe(helloDiv, {childList: true, characterData: true, subtree: true});
+  
+  function updateH3Content(content) {
+    const h3s = document.querySelectorAll('h3');
+    h3s.forEach(h3 => h3.textContent = content);
   }
 });
-
-function insertContentScript(activeTabId) {
-  // activeTabId provided from PyScript, but could be from JS e.g.
-  // let tabId = chrome.tabs.query({ active: true })[0].id;
-
-  // Inject content.js into the active tab to get the DOM.
-  chrome.scripting.executeScript({
-    target: { tabId: activeTabId },
-    files: [ "content.js" ],
-  });
-}
-
