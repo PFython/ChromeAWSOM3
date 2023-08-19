@@ -1,21 +1,37 @@
-// This script is inserted into the active browser tab and rerun/rerendered
-var dom = document.querySelector("body");
-if (document.title.includes("PyScript DOM Interaction")) {
-  // Current scope is popup.html... ignore
-} else {
-  var pageElements = document.querySelectorAll('h3')
-  var pageText = [];
-  for (var i = 0; i < pageElements.length; i++) {
-      pageText.push(pageElements[i].textContent);
+chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+  chrome.scripting.executeScript({
+      target: { tabId: tabs[0].id },
+      function: getDOMAsJSON
+  }, (result) => {
+      if (result && result.length > 0) {
+          displayDOMContent(result[0].result);
+      }
+  });
+});
+
+function getDOMAsJSON() {
+  function elementToJSON(node) {
+      let children = [];
+      for(let i = 0; i < node.childNodes.length; i++) {
+          let child = node.childNodes[i];
+          if(child.nodeType === 1) { // ELEMENT_NODE
+              children.push(elementToJSON(child));
+          }
+      }
+      return {
+          tagName: node.tagName,
+          attributes: Array.from(node.attributes).reduce((acc, attr) => {
+              acc[attr.name] = attr.value;
+              return acc;
+          }, {}),
+          children: children
+      };
   }
-  var joinedText = pageText.join('\n* ');
-  // var dom = document.querySelector("body");
-  // chrome.runtime.sendMessage(dom);
-  var finalText = "Active Tab: " + document.title + "\nURL: " + document.URL + "\nH3 Titles:\n\n* " + joinedText
-  chrome.runtime.sendMessage(finalText);
+
+  return elementToJSON(document.documentElement);
 }
 
-// Send the DOM to the main extension window.
-// chrome.tabs.sendMessage(null, { dom: dom });
-// Raises: Uncaught TypeError: Cannot read properties of undefined (reading 'sendMessage')
-
+function displayDOMContent(json) {
+  let contentDiv = document.getElementById('dom-content');
+  contentDiv.textContent = JSON.stringify(json, null, 2);
+}
