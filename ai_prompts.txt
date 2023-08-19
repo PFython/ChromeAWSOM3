@@ -1,0 +1,1 @@
+my chrome extension has four main files - "popup.html" which is the main exentionsion popup, a service worker "background.js", a content script "content.js" and "manifest.json". write a chrome extension that returns the dom of the active browser tab.
