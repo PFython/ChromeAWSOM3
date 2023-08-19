@@ -27,10 +27,10 @@ function clipboardCopy(text) {
 // }, false)
 
 function getDom(activeTabId) {
-  // Get the active tab id.
+  // activeTabId provided from PyScript, but could be from JS e.g.
   // let tabId = chrome.tabs.query({ active: true })[0].id;
 
-  // Inject a script into the active tab to get the DOM.
+  // Inject content.js into the active tab to get the DOM.
   chrome.scripting.executeScript({
     target: { tabId: activeTabId },
     files: [ "content.js" ],

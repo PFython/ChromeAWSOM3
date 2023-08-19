@@ -50,11 +50,10 @@
 //     }
 //   }, false)
 
-function getDom => {
-    // Get the DOM of the current page.
-  const dom = document.querySelector("body");
+// Get the DOM of the current page.
+const dom = document.querySelector("body");
+alert(document.title)
 
-  // Send the DOM to the main extension window.
-  chrome.tabs.sendMessage(null, { dom: dom });
-});
+// Send the DOM to the main extension window.
+// chrome.tabs.sendMessage(null, { dom: dom });
 
