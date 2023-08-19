@@ -23,6 +23,7 @@
 <!-- Deliberately breaking indendation for easy Copy/Paste of Python code -->
 <py-script>
 import json
+import asyncio
 from js import getChrome, clipboardCopy
 from js import insertContentScript  # Inserts and runs content.js (1st pass)
 
@@ -34,7 +35,7 @@ print(f"<h3>ACTIVE TAB ({active_tab.id}):</h3>")
 print(active_tab.to_py())
 
 print(f"<h3>DOM:</h3>")
-insertContentScript(active_tab.id)  # Inserts and runs content.js (2nd pass)
+insertContentScript()  # Inserts and runs content.js (2nd pass)
 </py-script>
   </body>
 </head>
