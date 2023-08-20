@@ -16,8 +16,6 @@
     <link rel="stylesheet" href="./popup.css" />
     <script defer src="runtime/pyscript.js"></script>
     <script src="content.js"></script>
-    <!-- <script src="background.js"></script> -->
-    <!-- <script src="popup.js"></script> -->
   </head>
   <body>
   <h3>ACTIVE TAB METADATA:</h3>
@@ -30,7 +28,6 @@
 <py-script>
 import json
 from js import document, chrome
-#from js import insertContentScript  # insert and run content.js (1st pass)
 
 # DISPLAY ACTIVE BROWSER TAB METADATA
 tabs = await chrome.tabs.query(["http*://*/*"])
@@ -41,6 +38,6 @@ insertion_point = document.getElementById('metadata')
 insertion_point.innerHTML = f"<i>{metadata_as_json}</i>."
 
 # RETRIEVE ACTIVE BROWSER TAB DOM AS JSON
-#insertContentScript(active_tab.id)  # insert and run content.js (2nd pass)
+# This is achieved by content.js which updates id="dom-content" above
 </py-script>
 </body></head></html>
