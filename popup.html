@@ -20,10 +20,10 @@
     <script src="popup.js"></script>
   </head>
   <body>
-  <h2>ACTIVE TAB METADATA:</h2>
+  <h3>ACTIVE TAB METADATA:</h3>
   <pre id="metadata"></pre>
   <p></p>
-  <h2>ACTIVE TAB DOM:</h2>
+  <h3>ACTIVE TAB DOM:</h3>
   <pre id="dom-content"></pre>
 
 <!-- Python code below is intentionally left-aligned to utilise full width  -->
@@ -34,7 +34,6 @@ from js import getChrome, clipboardCopy
 from js import insertContentScript  # insert and run content.js (1st pass)
 
 # DISPLAY ACTIVE BROWSER TAB METADATA
-
 chrome = getChrome()
 tabs = await chrome.tabs.query(["https://*/*"])
 active_tab = [x for x in tabs if x.active][0]
@@ -44,9 +43,6 @@ metadata = document.getElementById('metadata')
 metadata.innerHTML = f"<i>{metadata_as_json}</i>."
 
 # RETRIEVE ACTIVE BROWSER TAB DOM AS JSON
-
 insertContentScript(active_tab.id)  # insert and run content.js (2nd pass)
 </py-script>
-  </body>
-  </head>
-</html>
+</body></head></html>

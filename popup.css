@@ -4,12 +4,7 @@ body {
   background: orange;
 }
 
-h2,
-p {
-  text-align: center;
-}
-
 h3,
 p {
-  margin: 0;
+  text-align: center;
 }
