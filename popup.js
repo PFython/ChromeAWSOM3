@@ -8,16 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       chrome.scripting.executeScript({
         target: {tabId: activeTab.id},
-        function: updateH3Content,
+        function: updateH2Content,
         args: [helloDiv.textContent]
       });
     });
   });
 
   observer.observe(helloDiv, {childList: true, characterData: true, subtree: true});
-  
-  function updateH3Content(content) {
-    const h3s = document.querySelectorAll('h3');
-    h3s.forEach(h3 => h3.textContent = content);
+
+  function updateH2Content(content) {
+    const h2s = document.querySelectorAll('h2');
+    h2s.forEach(h2 => h2.textContent = content);
   }
 });
