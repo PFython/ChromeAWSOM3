@@ -1,6 +1,6 @@
 {
-  "name": "PyScript DOM Interaction",
-  "description": "Write Chrome Extensions in Python using PyScript",
+  "name": "PyScript Demo 2",
+  "description": "Build Chrome Extensions in Python/PyScript",
   "version": "2.0",
   "manifest_version": 3,
   "icons": {
