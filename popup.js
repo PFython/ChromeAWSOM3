@@ -14,22 +14,6 @@ function clipboardCopy(text) {
     alert("New content copied to clipboard")
 }
 
-// // Inject a script into the tab.
-// await chrome.tabs.executeScript(tabId, {
-//     code: `
-//       const dom = document;
-//       const title = document.title;
-//       const element = document.getElementById("my-element");
-
-//       chrome.runtime.sendMessage({
-//           info: {
-//               title,
-//               element,
-//             },
-//           });
-//         `,
-//       });
-
 // Listen for messages from the content script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Check if the message is an object
