@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<title>PyScript DOM Interaction</title>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -16,20 +15,17 @@
     <link rel="stylesheet" href="./popup.css" />
     <script defer src="runtime/pyscript.js"></script>
     <script src="content.js"></script>
-    <script src="background.js"></script>
     <script src="popup.js"></script>
   </head>
   <body>
-  <pre id="dom-content"></pre>
-<!-- Deliberately breaking indendation for easy Copy/Paste of Python code -->
-<div id="hello"></div>
-<button py-click="write_to_page()" id="manual">Say Hello</button>
-
-<py-script>
-def write_to_page():
-  manual_div = Element("hello")
-  manual_div.element.innerHTML = "<p><b>Hello World, this is python!</b></p>"
-</py-script>
+    <button py-click="write_to_popup()" id="manual">Say Hello</button>
+    <br><div id="hello"></div></br>
   </body>
-</head>
+
+<!-- Deliberately breaking indendation for easy Copy/Paste of Python code -->
+<py-script>
+def write_to_popup():
+  manual_div = Element("hello")
+  manual_div.element.innerHTML = "<p><b>Hello World, this is Python!</b></p>"
+</py-script>
 </html>
