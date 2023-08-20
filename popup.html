@@ -16,27 +16,28 @@
     <link rel="stylesheet" href="./popup.css" />
     <script defer src="runtime/pyscript.js"></script>
     <script src="content.js"></script>
-    <script src="background.js"></script>
-    <script src="popup.js"></script>
   </head>
   <body>
+  <h3>ACTIVE TAB METADATA:</h3>
+  <pre id="metadata"></pre>
+  <p></p>
+  <h3>ACTIVE TAB DOM:</h3>
   <pre id="dom-content"></pre>
-<!-- Deliberately breaking indendation for easy Copy/Paste of Python code -->
+
+<!-- Python code below is intentionally left-aligned to utilise full width  -->
 <py-script>
 import json
-from js import getChrome, clipboardCopy
-from js import insertContentScript  # Inserts and runs content.js (1st pass)
+from js import document, chrome
 
-chrome = getChrome()
-tabs = await chrome.tabs.query(["https://*/*"])
+# DISPLAY ACTIVE BROWSER TAB METADATA
+tabs = await chrome.tabs.query(["http*://*/*"])
 active_tab = [x for x in tabs if x.active][0]
+metadata_as_dict = active_tab.to_py()
+metadata_as_json = json.dumps(metadata_as_dict, indent=2)
+insertion_point = document.getElementById('metadata')
+insertion_point.innerHTML = f"<i>{metadata_as_json}</i>."
 
-print(f"<h3>ACTIVE TAB ({active_tab.id}):</h3>")
-print(active_tab.to_py())
-
-print(f"<h3>DOM:</h3>")
-insertContentScript(active_tab.id)  # Inserts and runs content.js (2nd pass)
+# RETRIEVE ACTIVE BROWSER TAB DOM AS JSON
+# This is achieved by content.js which updates id="dom-content" above
 </py-script>
-  </body>
-</head>
-</html>
+</body></head></html>
