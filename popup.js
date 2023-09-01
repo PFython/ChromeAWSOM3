@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       chrome.scripting.executeScript({
         target: {tabId: activeTab.id},
-        function: updateH2Content,
+        function: updateH3Content,
         args: [helloDiv.textContent]
       });
     });
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   observer.observe(helloDiv, {childList: true, characterData: true, subtree: true});
 
-  function updateH2Content(content) {
+  function updateH3Content(content) {
     const h2s = document.querySelectorAll('h2');
     h2s.forEach(h2 => h2.textContent = content);
   }
