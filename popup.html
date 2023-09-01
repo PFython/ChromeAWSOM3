@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<title>PyScript DOM Interaction</title>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -16,27 +15,17 @@
     <link rel="stylesheet" href="./popup.css" />
     <script defer src="runtime/pyscript.js"></script>
     <script src="content.js"></script>
-    <script src="background.js"></script>
     <script src="popup.js"></script>
   </head>
   <body>
+    <button py-click="write_to_popup()" id="manual">Say Hello</button>
+    <br><div id="hello"></div></br>
+  </body>
+
 <!-- Deliberately breaking indendation for easy Copy/Paste of Python code -->
 <py-script>
-import json
-import asyncio
-from js import getChrome, clipboardCopy
-from js import insertContentScript  # Inserts and runs content.js (1st pass)
-
-chrome = getChrome()
-tabs = await chrome.tabs.query(["https://*/*"])
-active_tab = [x for x in tabs if x.active][0]
-
-print(f"<h3>ACTIVE TAB ({active_tab.id}):</h3>")
-print(active_tab.to_py())
-
-print(f"<h3>DOM:</h3>")
-insertContentScript()  # Inserts and runs content.js (2nd pass)
+def write_to_popup():
+  manual_div = Element("hello")
+  manual_div.element.innerHTML = "<p><b>Hello World, this is Python!</b></p>"
 </py-script>
-  </body>
-</head>
 </html>
